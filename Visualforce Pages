@@ -1,0 +1,102 @@
+Visualforce Pages
+//ContactForm
+<apex:page standardController="Contact">
+    <head>
+        <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Quick Start: Visualforce</title>
+      <!-- Import the Design System style sheet -->
+      <apex:slds />
+    </head>
+    <body>
+        <apex:form >
+      <apex:pageBlock title="New Contact">
+        <!--Buttons -->
+         <apex:pageBlockButtons >
+            <apex:commandButton action="{!save}" value="Save"/>
+         </apex:pageBlockButtons>
+         <!--Input form -->
+         <apex:pageBlockSection columns="1">
+         <apex:inputField value="{!Contact.Firstname}"/>
+         <apex:inputField value="{!Contact.Lastname}"/>
+         <apex:inputField value="{!Contact.Email}"/>
+        </apex:pageBlockSection>
+      </apex:pageBlock>
+      </apex:form>
+    </body>
+</apex:page>
+             
+//NewCaseList
+<apex:page controller="NewCaseListController" >
+    <apex:repeat var="case" value="{!newCases}">
+        <apex:outputLink value="/{!case.ID}">
+            <apex:outputText value="/{!case.CaseNumber}"></apex:outputText>
+        </apex:outputLink>
+    </apex:repeat>
+</apex:page>
+
+//ShowImage
+<apex:page >
+    <apex:image alt="eye" title="eye"
+                url="{!URLFOR($Resource.vfimagetest, 'cats/kitten1.jpg')}"/>
+</apex:page>
+
+//AccountList
+<apex:page standardController="Account" recordSetVar="accounts">
+    <apex:repeat var="a" value="{!accounts}">
+        <li>
+            <apex:outputLink value="/{!a.Id}">
+            <apex:outputText value="!a.Name"></apex:outputText>
+            </apex:outputLink>
+        </li>   
+    </apex:repeat>
+</apex:page>
+
+//CreateContact
+<apex:page standardController="Contact" >
+    <apex:form >
+         <apex:pageBlock title="Edit Contact">
+        <apex:pageBlockSection >
+            <apex:inputField value="{! Contact.FirstName }"/>
+            <apex:inputField value="{! Contact.LastName }"/>
+            <apex:inputField value="{! Contact.Email }"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{! save }" value="Save" />
+        </apex:pageBlockButtons>     
+        </apex:pageBlock>     
+    </apex:form>
+</apex:page>
+            
+//OppView
+<apex:page standardController="Opportunity">
+        <apex:outputField value="{! Opportunity.Name }"/>
+        <apex:outputField value="{! Opportunity.Amount }"/>
+        <apex:outputField value="{! Opportunity.CloseDate }"/>
+        <apex:outputField value="{! Opportunity.Account.Name}"/>
+</apex:page>
+            
+//ContactView
+<apex:page standardController="Contact">
+    <apex:pageBlock title="Contact Summary">
+        <apex:pageBlockSection >
+           Frist Name: {! Contact.FirstName } <br/>
+            Last Name: {! Contact.LastName } <br/>
+            Owner Email: {! Contact.owner.Email } <br/>        
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>
+             
+//DisplayUserInfo
+<apex:page >
+    <apex:pageBlock title="User Status">
+        <apex:pageBlockSection columns="1">
+            {! $User.FirstName}
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>
+             
+//DisplayImage
+<apex:page showHeader="false" sidebar="false" >
+    <apex:image url="https://developer.salesforce.com/files/salesforce-developer-network-logo.png" />
+</apex:page>
