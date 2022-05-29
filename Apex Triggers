@@ -1,0 +1,53 @@
+-----Apex triggers-----
+//AccountAddressTrigger
+trigger AccountAddressTrigger on Account (before insert) {
+    for(Account account:Trigger.New){
+        if(account.Match_Billing_Address__c == true){
+            account.ShippingPostalCode =account.BillingPostalCode;
+        }
+    }
+
+//ClosedOpportunityTrigger
+trigger ClosedOpportunityTrigger on Opportunity (after insert,before insert) {
+    List<Task> tasklist = new List<Task>();
+    
+        for(Opportunity opp : Trigger.New){
+            if(opp.StageName == 'Closed Won'){
+                tasklist.add(new Task(Subject = 'Follow up Test Task', WhatId = opp.Id));
+            }
+        }
+    if(tasklist.size() > 0){
+        insert tasklist;
+    }
+//PushNotificationTrigger
+trigger PushNotificationTrigger on Property__c (after update) {
+    
+    /*
+    for (Property__c property : Trigger.New) {
+        
+        if (property.Price__c != Trigger.oldMap.get(property.Id).Price__c) {
+            Messaging.PushNotification msg = new Messaging.PushNotification();
+            String text = property.Name + '. New Price: $' + property.Price__c.setScale(0).format();
+            Map<String, Object> payload = Messaging.PushNotificationPayload.apple(text, '', null, null);
+            msg.setPayload(payload);
+            Set<String> users = new Set<String>();
+            users.add(UserInfo.getUserId());
+            msg.send('DreamHouzz', users);
+        } 
+        
+    }
+  */
+//RejectDuplicateFavorite
+trigger RejectDuplicateFavorite on Favorite__c (before insert) {
+    
+    // NOTE: this trigger needs to be bulkified
+    
+    Favorite__c favorite = Trigger.New[0];
+    List<Favorite__c> dupes = [Select Id FROM Favorite__C WHERE Property__c = :favorite.Property__c AND User__c = :favorite.User__c];
+    if (!dupes.isEmpty()) {
+        favorite.addError('duplicate');
+    }
+//RestrictContactByName
+trigger RestrictContactByName on Contact (before insert) {
+
+}
