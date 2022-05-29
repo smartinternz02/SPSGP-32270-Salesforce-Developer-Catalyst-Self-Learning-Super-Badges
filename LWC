@@ -1,0 +1,80 @@
+-----LWC-----
+BIEKCARD
+//BikeCard.html
+<template>
+    <div>
+        <div>Name: {name}</div>
+        <div>Description: {description}</div>
+        <lightning-badge label={material}></lightning-badge>
+        <lightning-badge label={category}></lightning-badge>
+        <div>Price: {price}</div>
+        <div><img src={pictureUrl}/></div>
+    </div>
+</template>
+
+//BikeCard.js
+import { LightningElement, wire } from 'lwc';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import Id from '@salesforce/user/Id';
+import NAME_FIELD from '@salesforce/schema/User.Name';
+const fields = [NAME_FIELD];
+export default class Selector extends LightningElement {
+    selectedProductId;
+    handleProductSelected(evt) {
+        this.selectedProductId = evt.detail;
+    }
+    userId = Id;
+    @wire(getRecord, { recordId: '$userId', fields })
+    user;
+    get name() {
+        return getFieldValue(this.user.data, NAME_FIELD);
+    }
+}
+
+//bikeCard.js-meta.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- The apiVersion may need to be increased for the current release -->
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Product Card</masterLabel>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+</LightningComponentBundle>
+
+
+HELLO WORLD
+//helloWorld.html
+<template>
+    <lightning-card title="HelloWorld" icon-name="custom:custom14">
+      <div class="slds-m-around_medium">
+        <p>Hello, {greeting}!</p>
+        <lightning-input label="Name" value={greeting} onchange={changeHandler}></lightning-input>
+      </div>
+    </lightning-card>
+  </template>
+
+
+//helloWorld.js
+import { LightningElement } from 'lwc';
+export default class HelloWorld extends LightningElement {
+  greeting = 'World';
+  changeHandler(event) {
+    this.greeting = event.target.value;
+  }
+}
+
+//helloworls,js-meta.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata" fqn="helloWorld">
+  <apiVersion>52.0</apiVersion>
+  <isExposed>true</isExposed>
+  <targets>
+    <target>lightning__AppPage</target>
+    <target>lightning__RecordPage</target>
+    <target>lightning__HomePage</target>
+  </targets>
+</LightningComponentBundle>
